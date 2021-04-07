@@ -1,4 +1,4 @@
-date,Steps,RestHR,Floors,ExerciseMinutes,StandMinutes,WalkHR
+date,steps,rest_hr,floors,exercise_minutes,stand_minutes,walk_hr
 2019-11-06,15171,58,20,96,164,109
 2019-11-07,11476,55,25,75,105,118
 2019-11-08,13626,56,23,72,159,105
