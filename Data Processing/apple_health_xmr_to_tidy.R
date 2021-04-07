@@ -71,9 +71,27 @@ flights_daily = df_cda %>%
   group_by(date) %>%
   summarise(Floors = sum(value, na.rm=TRUE))
 
+exercise_daily = df_cda %>%
+  filter(type == "ExerciseTime") %>%
+  group_by(date) %>%
+  summarise(ExerciseMinutes = sum(value, na.rm=TRUE))
+
+stand_daily = df_cda %>%
+  filter(type == "StandTime") %>%
+  group_by(date) %>%
+  summarise(StandMinutes = sum(value, na.rm=TRUE))
+
+walk_hr_daily = df_cda %>%
+  filter(type == "WalkingHeartRateAverage") %>%
+  group_by(date) %>%
+  summarise(WalkHR = sum(value, na.rm=TRUE))
+
 apple = steps_daily %>%
   full_join(rest_heart_daily, by='date') %>%
   full_join(flights_daily, by = 'date') %>%
+  full_join(exercise_daily, by = 'date') %>%
+  full_join(stand_daily, by = 'date') %>%
+  full_join(walk_hr_daily, by = 'date') %>%
   filter(date != "2019-11-05") %>%
   filter(date != "2020-10-05") # get rid of first and last date without full data
 
