@@ -9,7 +9,10 @@ A dataset of health metrics from Apple watch. Apple originally provides two .xml
 
 | Column Name | Data Type | Description | Range |
 |-------------|-----------|-----------|-------------|
-| `Rank` | Integer | End-of-year rank out of 100 on Billboard.com Country music charts |  1 to 100 |
-| `Artist` | String | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
-| `Track` | String | Title of song | 'til summer comes around to yours if you want it |
-| `Year` | Integer | Four digit integer of the year chart represents | 2002 to 2020 |
+| `date` | Integer | End-of-year rank out of 100 on Billboard.com Country music charts |  1 to 100 |
+| `steps` | String | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `rest_hr` | String | Title of song | 'til summer comes around to yours if you want it |
+| `floors` | Integer | Four digit integer of the year chart represents | 2002 to 2020 |
+| `exercise_minutes` | Integer | Four digit integer of the year chart represents | 2002 to 2020 |
+| `stand_minutes` | Integer | Four digit integer of the year chart represents | 2002 to 2020 |
+| `walk_hr` | Integer | Four digit integer of the year chart represents | 2002 to 2020 |
