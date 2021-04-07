@@ -3,9 +3,9 @@ Available Data
 
 Data dictionaries for the attached datasets are presented below.
 
-### billboard_country.csv
+### apple_clean.csv
 
-A dataset of the Billboard Top 100 Country songs at the end of the year. Data are scraped from Billboard.com and represent 2002-2020.
+A dataset of health metrics from Apple watch. Apple originally provides two .xml files with relevant health data when accessing your data repository: `export_cda.xml` and `export.xml`. Documentation on how to parse these files for relevant exercise and heart rate data, along with calculating daily statistics from shorter interval metrics, can be found in the file `apple_health_xmr_to_tidy.R` in the `Data Mining` folder.
 
 | Column Name | Data Type | Description | Range |
 |-------------|-----------|-----------|-------------|
