@@ -26,6 +26,31 @@ A dataset of health metrics from Fitbit wearable device. Fitbit provides access 
 | `date` | Integer | End-of-year rank out of 100 on Billboard.com Country music charts |  1 to 100 |
 | `steps` | String | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
 
+
+### running_clean.csv
+
+A dataset of tracked runs from Strava app along with historic weather conditions for the date (and time) of the run from DarkSky.
+
+| Column Name | Data Type | Description | Range |
+|-------------|-----------|-----------|-------------|
+| `date` | Date | End-of-year rank out of 100 on Billboard.com Country music charts |  1 to 100 |
+| `temp` | Integer | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `heat_index` | Integer | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `humidity` | Integer | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `dew_point` | Integer | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `activity_name` | String | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `duration` | Numeric | Time of run, in minutes | a thousand horses to zac brown band featuring jimmy buffett  |
+| `steps` | Integer | Number of steps taken during the run | a thousand horses to zac brown band featuring jimmy buffett  |
+| `calories` | Integer | Estimated number of calories burned during the run | a thousand horses to zac brown band featuring jimmy buffett  |
+| `distance` | Numeric | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `speed` | Numeric | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `pace` | Numeric | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `elev_gain` | Numeric | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `vo2max` | Numeric | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+| `avg_hr` | Integer | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+
+
+
 ### runkeeper.csv
 
 A dataset of health metrics from the Runkeeper app. 
