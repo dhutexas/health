@@ -95,6 +95,9 @@ apple = steps_daily %>%
   filter(date != "2019-11-05") %>%
   filter(date != "2020-10-05") # get rid of first and last date without full data
 
+apple %<>%
+  janitor::clean_names()
+
 write_csv(apple, 'Data/apple_clean.csv')
 
 
