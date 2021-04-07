@@ -25,3 +25,16 @@ A dataset of health metrics from Fitbit wearable device. Fitbit provides access 
 |-------------|-----------|-----------|-------------|
 | `date` | Integer | End-of-year rank out of 100 on Billboard.com Country music charts |  1 to 100 |
 | `steps` | String | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+
+### runkeeper.csv
+
+A dataset of health metrics from the Runkeeper app. 
+
+| Column Name | Data Type | Description | Range |
+|-------------|-----------|-----------|-------------|
+| `date` | Integer | End-of-year rank out of 100 on Billboard.com Country music charts |  1 to 100 |
+| `steps` | String | Name of artist or artists | a thousand horses to zac brown band featuring jimmy buffett  |
+
+
+
+
