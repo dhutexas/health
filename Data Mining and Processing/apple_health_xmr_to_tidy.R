@@ -4,8 +4,8 @@ library(magrittr)
 library(lubridate)
 
 # parse xml object
-healthxml = read_xml("Data/Raw Data/export.xml")
-healthxml_cda = read_xml("Data/Raw Data/export_cda.xml")
+healthxml = read_xml("Data/Raw Data/export 2.xml")
+healthxml_cda = read_xml("Data/Raw Data/export_cda 2.xml")
 
 # get all the <record>s, as 'Record' is how the data are structured by Apple
 recs <- xml_find_all(healthxml, "//Record") 
@@ -92,8 +92,9 @@ apple = steps_daily %>%
   full_join(exercise_daily, by = 'date') %>%
   full_join(stand_daily, by = 'date') %>%
   full_join(walk_hr_daily, by = 'date') %>%
+  # get rid of first and last date without full data
   filter(date != "2019-11-05") %>%
-  filter(date != "2020-10-05") # get rid of first and last date without full data
+  filter(date != "2021-04-08") 
 
 apple %<>%
   janitor::clean_names()
