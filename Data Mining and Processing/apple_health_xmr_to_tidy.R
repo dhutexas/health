@@ -4,8 +4,8 @@ library(magrittr)
 library(lubridate)
 
 # parse xml object
-healthxml = read_xml("Data/export.xml")
-healthxml_cda = read_xml("Data/export_cda.xml")
+healthxml = read_xml("Data/Raw Data/export.xml")
+healthxml_cda = read_xml("Data/Raw Data/export_cda.xml")
 
 # get all the <record>s, as 'Record' is how the data are structured by Apple
 recs <- xml_find_all(healthxml, "//Record") 

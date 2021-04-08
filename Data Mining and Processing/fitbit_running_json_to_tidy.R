@@ -1,5 +1,5 @@
 # ease file gathering by changing working directory
-setwd('/Volumes/Father_Time/Data Science Projects/Fitbit/health/Data/')
+setwd('/Volumes/Father_Time/Data Science Projects/Fitbit/health/Data/Raw Data/')
 
 library(jsonlite)
 library(tibble)
