@@ -7,9 +7,9 @@ library(zoo)
 
 # read in data files
 apple = read.csv('Data/apple_clean.csv', stringsAsFactors = F)
+fitbit = read.csv('Data/fitbit_clean.csv', stringsAsFactors = F)
 run_fit = read.csv('Data/running_fitbit.csv', stringsAsFactors = F)
 run_strav = read.csv('Data/running_strava.csv', stringsAsFactors = F)
-fitbit = read.csv('Data/fitbit_clean.csv', stringsAsFactors = F)
 run_temps = read.csv('Data/running_temps.csv', stringsAsFactors = F)
 
 # make modifications to datasets to aid with joining and analysis
@@ -124,3 +124,7 @@ health %<>%
          rest_hr_7_day_avg = rollmean(rest_hr_yesterday, k=7, fill=NA, align='right'),
          rest_hr_14_day_avg = rollmean(rest_hr_yesterday, k=14, fill=NA, align='right'),
          rest_hr_30_day_avg = rollmean(rest_hr_yesterday, k=30, fill=NA, align='right'))
+
+write.csv(health, 'health_clean.csv', row.names=FALSE)
+
+
