@@ -22,7 +22,9 @@ apple %<>%
 fitbit %<>%
   rename(fitbit_steps = steps,
          fitbit_floors = floors,
-         fitbit_rest_hr = rest_avg_hr) %>%
+         fitbit_rest_hr = rest_avg_hr,
+         time_in_bed = timeInBed,
+         sleep_efficienty = efficiency) %>%
   mutate(date = as.Date(date),
          sleep_duration = sleep_duration / 60000) %>%
   # filter out later dates when no longer worn
@@ -54,30 +56,51 @@ fitbit %<>%
 run_fit %<>%
   mutate(date = as.Date(date)) %>%
   # remove runs less than 1 mile
-  filter(fitbit_distance > 1)
+  filter(fitbit_distance > 1) %>%
+  # running times are +5 hours from local time, adjusting here
+  mutate(start_time = lubridate::hms(run_start_time) - hours(5),
+         run_start_time = sprintf("%02d:%02d:%02d", hour(start_time), minute(start_time), second(start_time))) %>%
+  # match variable names for merging with Strava
+  rename(run_duration_fitbit = duration,
+         active_duration_fitbit = active_duration) %>%
+  # convert pace to miles per minute (from seconds per minute)
+  mutate(mi_min_pace_fitbit = pace / 60)
 
 run_strav %<>%
-  separate(start_date, into = c('date','time'), sep = 'T') %>%
+  # split out time from date
+  separate(start_date_local, into = c('date','time'), sep = 'T') %>%
   mutate(date = as.Date(date),
          time = gsub('Z', '', time)) %>%
   rename(strava_elev_gain = total_elevation_gain,
          strava_distance = distance,
          run_start_time = time,
-         strava_avg_speed = average_speed) 
+         strava_avg_speed = average_speed,
+         mi_min_pace_strava = mi_min_pace) %>%
+  # match variables to fitbit metrics
+  mutate(run_duration_strava = elapsed_time / 60,
+         active_duration_strava = moving_time / 60)
 
+# bring in data on running temps
 run_temps %<>%
   janitor::clean_names() %>%
   mutate(date = as.Date(date))
 
-# have double-date data in running
+# merge running data, matching variables where feasible (on same scale)
 running <- full_join(run_fit, run_strav, run_temps, by = c('date','run_start_time')) %>%
-  select(date, run_start_time, everything()) %>%
+  mutate(run_distance = rowMeans(cbind(fitbit_distance, strava_distance), na.rm = T),
+         run_duration = rowMeans(cbind(run_duration_strava, run_duration_fitbit), na.rm = T),
+         run_active_duration = rowMeans(cbind(active_duration_strava, active_duration_fitbit), na.rm = T),
+         mi_min_pace = rowMeans(cbind(mi_min_pace_strava, mi_min_pace_fitbit), na.rm = T),
+         run_avg_hr = rowMeans(cbind(avg_hr, average_heartrate), na.rm = T)) %>%
+  select(date, run_start_time, run_distance, mi_min_pace, run_duration, run_active_duration, run_avg_hr, max_heartrate, 
+         mi_min_max_pace, strava_elev_gain) %>%
   arrange(date)
 
+# join running with health data
 health <- full_join(apple, running, by = 'date') %>%
   arrange(date)
 
-# need fitbit data and weather data
+# add fitbit data and weather data
 health %<>% full_join(fitbit, by = c('date')) %>%
   mutate(steps = rowSums(cbind(apple_steps, fitbit_steps), na.rm = T),
          floors = rowSums(cbind(apple_floors, fitbit_floors), na.rm = T),
@@ -86,14 +109,13 @@ health %<>% full_join(fitbit, by = c('date')) %>%
             fitbit_floors, apple_floors,
             fitbit_rest_hr, apple_rest_hr)) %>%
   select(date, steps, floors, rest_hr, everything()) %>%
+  # drop obviously incorrect observations before calculate summary stats
+  mutate(steps = ifelse(steps < 300, NA, steps),
+         rest_hr = ifelse(rest_hr < 40, NA, rest_hr),
+         run_duration = ifelse(run_duration > 55, NA, run_duration),
+         exercise_minutes = ifelse(exercise_minutes < 10, NA, exercise_minutes),
+         mi_min_max_pace = ifelse(mi_min_max_pace < 3, NA, mi_min_max_pace)) %>%
   arrange(date)
-
-# add run prefix to running columns to clarify what they contain
-run_cols = c('fitbit_distance', 'calories', 'fitbit_elev_gain','avg_speed','pace','duration',
-             'active_duration','avg_hr', 'strava_distance', 'elapsed_time', 'moving_time', 'elev_high',
-             'elev_low', 'strava_elev_gain', 'max_heartrate', 'strava_avg_speed', 'max_speed')
-health %<>% 
-  rename_with( ~ paste("run", .x, sep = "_"), .col=all_of(run_cols))
 
 # add time-level data labels
 health %<>%
@@ -126,5 +148,4 @@ health %<>%
          rest_hr_30_day_avg = rollmean(rest_hr_yesterday, k=30, fill=NA, align='right'))
 
 write.csv(health, 'health_clean.csv', row.names=FALSE)
-
 

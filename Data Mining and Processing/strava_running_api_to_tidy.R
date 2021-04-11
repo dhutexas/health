@@ -12,18 +12,28 @@ app_secret = dw$strava_app_secret
 
 # get api authorization via oauth 
 stoken <- httr::config(token = strava_oauth(app_name, app_client_id, app_secret, app_scope="activity:read_all"))
+select(average_heartrate, average_speed, elapsed_time, elev_high, elev_low, max_heartrate, max_speed, moving_time,
+       start_date_local, total_elevation_gain, type)
 
-# pull activity
-my_acts <- get_activity_list(stoken) 
+# pull activity and compile
+strava <- get_activity_list(stoken) %>%
+  compile_activities(., units = 'imperial') %>%
+  filter(type == 'Run') %>%
+  # note that average_speed, max_speed in mph; distance in miles, elevation in feet
+  select(start_date_local, distance, elapsed_time, moving_time, average_speed, max_speed, max_heartrate, average_heartrate, 
+         elev_high, elev_low, total_elevation_gain) %>%
+  # convert mph avg_speed to miles/min pace, same with max_speed
+  mutate(mi_min_pace = 60 / average_speed,
+         mi_min_max_pace = 60 / max_speed) %>%
+  # convert durations from seconds to minutes
+  mutate(duration_minutes = seconds_to_period(elapsed_time),
+         run_duration_minutes = seconds_to_period(moving_time))
 
-# compile activities from nested list
-strava <- compile_activities(my_acts) %>%
-  # ensure actually was moving ;p
-  filter(average_heartrate > 1) %>% 
-  select(start_date,distance,elapsed_time,moving_time,elev_high,elev_low,
-                             total_elevation_gain,max_heartrate,average_speed,max_speed) %>%
-  # convert distance to miles, time to minutes
-  mutate(elapsed_time = elapsed_time / 60,
-         distance = distance * 0.621371)
+#strava %>%
+#  # convert mph avg_speed to miles/min pace, same with max_speed
+#  mutate(mi_min_pace = 60 / average_speed,
+#          mi_min_max_pace = 60 / max_speed) %>%
+#  mutate(seconds = paste0('.', gsub('^.\\.', '', mi_min_pace))) %>%
+#  mutate(seconds = as.numeric(seconds) * 60)
 
 write.csv(strava, 'running_strava.csv', row.names = FALSE)
