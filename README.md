@@ -9,6 +9,3 @@ Usage
 -----------------------
 
 * Explore the `Data` folder to see the available datasets.
-* Run `Billboard_Top_100_Scraper.py`.
-    * This program can be used to gather the top 100 country songs from Billboard.com for any range of years.
-    * Or you can find a tidy dataset of every year (2002-2020) already available as `billboard_country.rds` in the `Data` folder.
